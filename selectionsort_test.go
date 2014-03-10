@@ -8,16 +8,12 @@ import (
 func TestIsSorted(t *testing.T) {
 	Logger.Init()
 	var unsorted IntArray = []int{0, 1, 1, 2, 3, 5, 4, 6, 7}
-	if !unsorted.IsSorted() {
+	if unsorted.IsSorted() {
 		t.Errorf("Unsorted array : expected IsSorted to return false")
-	} else {
-		Logger.Infof("Unsorted array : %v", unsorted)
 	}
 	var sorted IntArray = []int{0, 1, 1, 2, 3, 3, 4, 6, 7}
-	if sorted.IsSorted() {
+	if !sorted.IsSorted() {
 		t.Errorf("Sorted array : expected IsSorted to return true")
-	} else {
-		Logger.Infof("Sorted array : %v", sorted)
 	}
 }
 func TestSelectionSort(t *testing.T) {
@@ -28,5 +24,8 @@ func TestSelectionSort(t *testing.T) {
 	}
 	Logger.Debugf("%v", a)
 	SelectionSort(a)
+	if !a.IsSorted() {
+		t.Errorf("Selection sort failed")
+	}
 	Logger.Debugf("%v", a)
 }
