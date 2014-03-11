@@ -2,11 +2,15 @@ package Sort
 
 import (
 	"DbxDev/Logger"
+	"math/rand"
 	"testing"
 )
 
-func TestIsSorted(t *testing.T) {
+func TestInitSelect(t *testing.T) {
 	Logger.Init()
+	Logger.SetInfo()
+}
+func TestIsSorted(t *testing.T) {
 	var unsorted IntArray = []int{0, 1, 1, 2, 3, 5, 4, 6, 7}
 	if unsorted.IsSorted() {
 		t.Errorf("Unsorted array : expected IsSorted to return false")
@@ -16,16 +20,34 @@ func TestIsSorted(t *testing.T) {
 		t.Errorf("Sorted array : expected IsSorted to return true")
 	}
 }
-func TestSelectionSort(t *testing.T) {
-	Logger.Init()
+func TestSmallSelectionSort(t *testing.T) {
 	var a IntArray = make([]int, 10)
 	for i := 0; i < len(a); i++ {
-		a[i] = len(a) - i
+		a[i] = rand.Int() % (i + 1)
 	}
-	Logger.Debugf("%v", a)
+	Logger.Infof("Before Selection sorting %v", a)
 	SelectionSort(a)
 	if !a.IsSorted() {
 		t.Errorf("Selection sort failed")
 	}
-	Logger.Debugf("%v", a)
+	Logger.Infof("After sorting %v", a)
+}
+func TestBigSelectionSort(t *testing.T) {
+	t.SkipNow()
+	bigSize := 1000
+	var a IntArray = make([]int, bigSize)
+	for i := 0; i < len(a); i++ {
+		a[i] = rand.Int() % (100)
+	}
+	if a.IsSorted() {
+		Logger.Infof("Array of size %v is sorted", bigSize)
+	} else {
+		Logger.Infof("Array of size %v is unsorted", bigSize)
+	}
+
+	SelectionSort(a)
+	if !a.IsSorted() {
+		t.Errorf("Selection sort failed")
+	}
+	Logger.Infof("Array of size %v is (selection)sorted", bigSize)
 }

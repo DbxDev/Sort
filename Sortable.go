@@ -13,10 +13,14 @@ type Sortable interface {
 
 type IntArray []int
 
+// Less strictly to ensure stability
 func (a IntArray) Less(i, j int) bool {
-	return a[i] <= a[j]
+	return a[i] < a[j]
 }
 func (a IntArray) Swap(i, j int) {
+	if i == j {
+		return
+	}
 	swap := a[i]
 	a[i] = a[j]
 	a[j] = swap
@@ -26,7 +30,7 @@ func (a IntArray) Size() int {
 }
 func (a IntArray) IsSorted() bool {
 	for i := 0; i < a.Size()-1; i++ {
-		if !a.Less(i, i+1) {
+		if a[i] != a[i+1] && !a.Less(i, i+1) {
 			Logger.Debugf("Unsorted array")
 			return false
 		}
