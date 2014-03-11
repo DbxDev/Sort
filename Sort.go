@@ -33,3 +33,19 @@ func InsertionSort(values Sortable) {
 		}
 	}
 }
+
+/*	h-sort an array with insertion sort applied
+	to every h-th element
+*/
+func ShellSort(values Sortable, h int) {
+	Logger.Infof("Shell sort of heap %v", h)
+	for i := 0; i < values.Size(); i++ {
+		step := i
+		for step >= h {
+			if values.Less(step, step-h) {
+				values.Swap(step, step-h)
+			}
+			step -= h
+		}
+	}
+}
