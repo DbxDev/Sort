@@ -7,11 +7,13 @@ import (
 )
 
 func TestInitInsert(t *testing.T) {
+	skipAll = true
 	Logger.Init()
 	Logger.SetInfo()
 }
 
 func TestSmallInsertionSort(t *testing.T) {
+	doOrSkip(t)
 	var a IntArray = make([]int, 10)
 	for i := 0; i < len(a); i++ {
 		a[i] = rand.Int() % (i + 1)
@@ -24,6 +26,7 @@ func TestSmallInsertionSort(t *testing.T) {
 	Logger.Infof("After insertion sorting %v", a)
 }
 func TestBigInsertionSort(t *testing.T) {
+	doOrSkip(t)
 	bigSize := 1000
 	var a IntArray = make([]int, bigSize)
 	for i := 0; i < len(a); i++ {
