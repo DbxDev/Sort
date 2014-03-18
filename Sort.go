@@ -59,15 +59,10 @@ func MergeSort(values *IntArray) {
 	mergeSort(values, &aux, lo, hi)
 }
 
-var count int = 0
-
 // Recurcive method using an auxiliary array
 func mergeSort(values *IntArray, aux *IntArray, lo, hi int) {
-	count++
-	if count > 100 {
-		panic("Too many recurcive calls")
-	}
-	Logger.Debugf("[%v] Merge sort with lo=%v , hi=%v", count, lo, hi)
+
+	Logger.Debugf("Merge sort with lo=%v , hi=%v", lo, hi)
 	mid := lo + (hi-lo)/2
 	// if there is at least 3 elements we mergesort again
 	if lo < mid && mid < hi {
@@ -113,4 +108,8 @@ func merge(values *IntArray, aux *IntArray, lo, mid, hi int) {
 	for i := 0; i <= hi-lo; i++ {
 		(*values)[lo+i] = (*aux)[lo+i]
 	}
+}
+
+func QuickSort(values *IntArray) {
+
 }
