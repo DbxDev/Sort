@@ -55,7 +55,7 @@ func TestSortSmall(t *testing.T) {
 }
 
 func TestMergeSort(t *testing.T) {
-	//t.SkipNow()
+	t.SkipNow()
 	doOrSkip(t)
 	var a IntArray = make([]int, 20)
 	for i := 0; i < len(a); i++ {

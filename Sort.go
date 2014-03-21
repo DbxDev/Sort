@@ -1,7 +1,9 @@
 package Sort
 
 import (
+	"DbxDev/List"
 	"DbxDev/Logger"
+	"fmt"
 )
 
 // Define a pointer moving from left to right.
@@ -110,6 +112,57 @@ func merge(values *IntArray, aux *IntArray, lo, mid, hi int) {
 	}
 }
 
+// Quicksort a non stable fast sorting method
+// It uses a pivot value and parts the array :
+// - upper values on the right
+// - lower values on the left
 func QuickSort(values *IntArray) {
+	List.ShuffleInt(*values)
+	Logger.Debugf("Shuffled array %v", *values)
+	doPivot(values, 0, values.Size()-1)
+}
 
+func doPivot(values *IntArray, lo, hi int) {
+	if hi < lo {
+		panic(fmt.Errorf("hi=%v[%v]<lo=%v[%v]for array %v", hi, (*values)[hi], lo, (*values)[lo], values))
+	}
+	Logger.Infof("Pivot [%v , %v] - %v", lo, hi, (*values)[lo:hi+1])
+	if lo == hi {
+		Logger.Debugf("returning...")
+		return
+	}
+	if hi-lo == 1 {
+		Logger.Debugf("comparing %v and %v and swap if necessary", lo, hi)
+		if values.Less(hi, lo) {
+			values.Swap(lo, hi)
+		}
+		return
+	}
+	pivot := lo
+	i := lo
+	j := hi + 1 // so the first j-- make j actually start a 'hi'
+	// iterate until pointers cross
+	for i < j {
+		i++
+		j--
+		Logger.Debugf("[pivot{%v}=%v] New loop i=%v,j=%v", pivot, (*values)[pivot], i, j)
+		for values.Less(i, pivot) && i < j {
+			i++
+			Logger.Debugf("Left Pointer moved to %v", i)
+		}
+		for values.Less(pivot, j) && j > i {
+			j--
+			Logger.Debugf("Right Pointer moved to %v", j)
+		}
+		Logger.Debugf("Swapping %v - %v", i, j)
+		values.Swap(i, j)
+
+		Logger.Debugf("Current array state %v", *values)
+	}
+	Logger.Debugf("Swapping pivot from %v to %v", pivot, j)
+	values.Swap(pivot, j)
+	Logger.Debugf("Final state [%v,%v] %v", lo, hi, *values)
+	Logger.Infof("Next steps : %v-%v and %v-%v", lo, j-1, j+1, hi)
+	doPivot(values, lo, j-1)
+	doPivot(values, j+1, hi)
 }
