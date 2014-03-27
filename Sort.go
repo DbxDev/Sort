@@ -3,7 +3,6 @@ package Sort
 import (
 	"DbxDev/List"
 	"DbxDev/Logger"
-	"fmt"
 )
 
 // Define a pointer moving from left to right.
@@ -123,46 +122,60 @@ func QuickSort(values *IntArray) {
 }
 
 func doPivot(values *IntArray, lo, hi int) {
-	if hi < lo {
-		panic(fmt.Errorf("hi=%v[%v]<lo=%v[%v]for array %v", hi, (*values)[hi], lo, (*values)[lo], values))
-	}
-	Logger.Infof("Pivot [%v , %v] - %v", lo, hi, (*values)[lo:hi+1])
-	if lo == hi {
-		Logger.Debugf("returning...")
+	Logger.Debugf("Pivot [%v , %v] - %v", lo, hi, (*values)[lo:hi+1])
+	if hi <= lo {
+		Logger.Debugf("lo=hi : returning...")
 		return
 	}
 	if hi-lo == 1 {
-		Logger.Debugf("comparing %v and %v and swap if necessary", lo, hi)
+		Logger.Debugf("Comparing %v and %v and swap if necessary", lo, hi)
 		if values.Less(hi, lo) {
 			values.Swap(lo, hi)
 		}
 		return
 	}
 	pivot := lo
-	i := lo
-	j := hi + 1 // so the first j-- make j actually start a 'hi'
+	i := pivot  // i start at pivot + 1
+	j := hi + 1 // j start a 'hi'
 	// iterate until pointers cross
-	for i < j {
-		i++
-		j--
-		Logger.Debugf("[pivot{%v}=%v] New loop i=%v,j=%v", pivot, (*values)[pivot], i, j)
-		for values.Less(i, pivot) && i < j {
+	for {
+		Logger.Debugf("[pivot{%v}=%v] New loop ]i=%v,j=%v[", pivot, (*values)[pivot], i, j)
+
+		// init we shift by 1 and do it again for every loop
+		for {
 			i++
 			Logger.Debugf("Left Pointer moved to %v", i)
+			// if pivot is smaller than the left pointer value
+			// or if left pointer leave the range of values
+			if i >= hi || values.Less(pivot, i) {
+				Logger.Debugf("Left Pointer break [%v,%v] %v", i, j, values.Less(pivot, i))
+				break
+			}
 		}
-		for values.Less(pivot, j) && j > i {
+		// init we shift by 1 and do it again for every loop
+		for {
 			j--
 			Logger.Debugf("Right Pointer moved to %v", j)
+			// if pivot is greater or equal than right pointer value
+			// or if right pointers is at lo index (impossible because of Less(pivot,j) test)
+			if !values.Less(pivot, j) {
+				Logger.Debugf("Right Pointer break [%v,%v] %v", i, j, values.Less(pivot, i))
+				break
+			}
+		}
+		if i >= j {
+			break // pointers cross
 		}
 		Logger.Debugf("Swapping %v - %v", i, j)
 		values.Swap(i, j)
-
 		Logger.Debugf("Current array state %v", *values)
 	}
+	// Swapping pivot with the mid value
+	//mid := i + (j-i)/2
 	Logger.Debugf("Swapping pivot from %v to %v", pivot, j)
 	values.Swap(pivot, j)
 	Logger.Debugf("Final state [%v,%v] %v", lo, hi, *values)
-	Logger.Infof("Next steps : %v-%v and %v-%v", lo, j-1, j+1, hi)
+	Logger.Debugf("Next steps : %v-%v and %v-%v", lo, j-1, j+1, hi)
 	doPivot(values, lo, j-1)
 	doPivot(values, j+1, hi)
 }

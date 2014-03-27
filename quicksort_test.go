@@ -22,22 +22,21 @@ func TestQuickSortSmall(t *testing.T) {
 	if !a.IsSorted() {
 		t.Errorf("Quick sort failed")
 	}
-	Logger.Infof("After insertion sorting %v", a)
+	Logger.Infof("After quick sorting %v", a)
 
 }
 func TestQuickSortBig(t *testing.T) {
-	t.SkipNow()
+	//t.SkipNow()
 	Logger.SetInfo()
-	size := 50
+	size := 5000
 	var a IntArray = make([]int, size)
 	for i := 0; i < size; i++ {
 		a[i] = rand.Intn((size * 10) / 100)
 	}
-	Logger.Infof("Before insert sorting %v", a)
 	QuickSort(&a)
 	if !a.IsSorted() {
 		t.Errorf("Quick sort failed")
 	}
-	Logger.Infof("After insertion sorting %v", a)
+	Logger.Infof("Big array of size %v is sorted.", size)
 
 }
